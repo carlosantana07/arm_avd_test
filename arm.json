@@ -7,19 +7,23 @@
          "defaultValue": "eastus"
       },
       "vmName": {
-        "type": "int",
+        "type": "string",
         "metadata": {
           "description": "Name of the vm, will be used as DNS Name for the Public IP used to access the Virtual Machine."
         },
-        "defaultValue": 1
-      }
+        "defaultValue": "AVD-TEST"
+      },
+      "vmNameCount": {
+         "type": "int",
+         "defaultValue": 1
+    }
     },
     "functions": [],
     "variables": {},
     "resources": [
        {
          "type": "Microsoft.Compute/virtualMachines/extensions",
-         "name": "[concat(copyIndex(),'AVD-TEST-', uniqueString(resourceGroup().id))]",
+         "name": "[concat(copyIndex(),'parameters('vmName')', uniqueString(resourceGroup().id))]",
          "apiVersion": "2015-05-01-preview",
          "location": "[parameters('location')]",
          "dependsOn": [
@@ -37,8 +41,8 @@
            }
          },
          "copy": {
-            "name": "AVD-TEST-",
-            "count": "[parameters('vmName')]"
+            "name": "vmNameCopy",
+            "count": "[parameters('vmNameCount')]"
          }
        }
     ],
