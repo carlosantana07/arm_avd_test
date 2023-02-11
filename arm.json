@@ -11,15 +11,19 @@
         "metadata": {
           "description": "Name of the vm, will be used as DNS Name for the Public IP used to access the Virtual Machine."
         },
-        "defaultValue": "avd-arm-1"
-      }
+        "defaultValue": "AVD-TEST"
+      },
+      "vmNameCount": {
+         "type": "int",
+         "defaultValue": 1
+    }
     },
     "functions": [],
     "variables": {},
     "resources": [
        {
          "type": "Microsoft.Compute/virtualMachines/extensions",
-         "name": "[concat(parameters('vmName'),'/enabledsc')]",
+         "name": "[concat('parameters('vmName')', copyIndex())]",
          "apiVersion": "2015-05-01-preview",
          "location": "[parameters('location')]",
          "dependsOn": [
@@ -35,6 +39,10 @@
              ],
              "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File install.ps1"
            }
+         },
+         "copy": {
+            "name": "vmNameCopy",
+            "count": "[parameters('vmNameCount')]"
          }
        }
     ],
